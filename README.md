@@ -14,7 +14,7 @@ Requirements:
 mvn io.quarkus.platform:quarkus-maven-plugin:2.16.0.Final:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=demo
-    -Dextensions="resteasy-reactive"
+    -Dextensions="resteasy-reactive-jackson"
 cd demo
 ```
 
@@ -96,3 +96,180 @@ git push origin demo
 6.- ArgoCD: create application from github repository, showcase
 
 ## Second Showcase: postgresql, helm, mapping user properties
+
+1.- Configure REST Data with Panache
+
+```
+./mvnw quarkus:add-extension -Dextensions='quarkus-hibernate-orm-rest-data-panache'
+```
+
+add the driver
+
+```
+./mvnw quarkus:add-extension -Dextensions='jdbc-postgresql'
+```
+
+add entity
+
+```java
+@Entity
+public class Fruit extends PanacheEntity {
+    public String name;
+}
+```
+
+add the REST Data with Panache entity:
+
+```java
+public interface FruitResource extends PanacheEntityResource<Fruit, Long> {
+}
+```
+
+add import.sql:
+
+```sql
+insert into Fruit(id, name) values (1, 'apple');
+insert into Fruit(id, name) values (2, 'banana');
+```
+
+browse:
+
+`localhost:8080/fruit`
+
+2.- Configure Hibernate ORM for production:
+
+Initialize data
+```
+quarkus.hibernate-orm.sql-load-script=import.sql
+quarkus.hibernate-orm.database.generation=drop-and-create
+```
+
+JDBC URL
+```
+quarkus.datasource.jdbc.url=${POSTGRESQL_URL}
+quarkus.datasource.username=${POSTGRESQL_USERNAME}
+quarkus.datasource.password=${POSTGRESQL_PASSWORD}
+```
+
+3.- Container image is ready
+
+build and push
+
+4.- Configure Kubernetes
+
+```
+quarkus.openshift.env.vars.POSTGRESQL_URL=jdbc:postgresql://host:1111/database
+quarkus.openshift.env.vars.POSTGRESQL_USERNAME=user
+quarkus.openshift.env.vars.POSTGRESQL_PASSWORD=pass
+```
+
+5.- Configure Helm
+
+add postgresql:
+
+```
+quarkus.helm.dependencies.postgresql.alias=db
+quarkus.helm.dependencies.postgresql.version=11.9.1
+quarkus.helm.dependencies.postgresql.repository=https://charts.bitnami.com/bitnami
+```
+
+configure postgresql:
+
+```
+quarkus.helm.values."db.auth.database".value=my_database
+quarkus.helm.values."db.auth.username".value=user
+quarkus.helm.values."db.auth.password".value=pass
+```
+
+```
+quarkus.helm.values."db.volumePermissions.enabled".value-as-bool=false
+quarkus.helm.values."db.volumePermissions.securityContext.runAsUser".value=auto
+quarkus.helm.values."db.securityContext.enabled".value-as-bool=false
+quarkus.helm.values."db.shmVolume.chmod.enabled".value-as-bool=false
+quarkus.helm.values."db.primary.containerSecurityContext.enabled".value-as-bool=false
+quarkus.helm.values."db.primary.containerSecurityContext.runAsUser".value=auto
+quarkus.helm.values."db.primary.podSecurityContext.enabled".value-as-bool=false
+quarkus.helm.values."db.primary.podSecurityContext.fsGroup".value=auto
+```
+
+overwrite jdbc url:
+
+```
+quarkus.helm.values."app.envs.POSTGRESQL_URL".value=jdbc:postgresql://demo-db:5432/my_database
+```
+
+6.- Provide user values.yaml
+
+create in src/main/helm/values.yaml
+
+```
+app:
+  envs:
+    POSTGRESQL_URL: jdbc:postgresql://demo-db:5432/my_database
+db:
+  auth:
+    database: my_database
+    password: pass
+    username: user
+  securityContext:
+    enabled: false
+  volumePermissions:
+    securityContext:
+      runAsUser: auto
+    enabled: false
+  shmVolume:
+    chmod:
+      enabled: false
+  primary:
+    podSecurityContext:
+      fsGroup: auto
+      enabled: false
+    containerSecurityContext:
+      runAsUser: auto
+      enabled: false
+```
+
+7.- ArgoCD: update application from github repository, showcase
+
+## Third Showcase: mapping more properties, helm profiles
+
+1.- Map ImagePullPolicy
+
+Explain about YAMLPath: https://github.com/yaml-path/YamlPath
+
+```
+quarkus.helm.values.imagePullPolicy.paths=(kind == Deployment).spec.template.spec.containers.(name == demo).imagePullPolicy
+```
+
+Using wildcards:
+
+```
+quarkus.helm.values.imagePullPolicy.paths=*.containers.(name == demo).imagePullPolicy
+```
+
+And multiple locations:
+
+```
+quarkus.helm.values.labelVersion.paths=*.labels.'app.kubernetes.io/version',*.matchLabels.'app.kubernetes.io/version'
+```
+
+And overwrite the value:
+
+```
+quarkus.helm.values.labelVersion.paths=*.labels.'app.kubernetes.io/version',*.matchLabels.'app.kubernetes.io/version'
+quarkus.helm.values.labelVersion.value=0.0.5
+```
+
+2.- Helm profiles
+
+Add host to route (it also works for Ingress)
+```
+quarkus.openshift.route.host=prod-host
+```
+
+Create new dev profile:
+
+```
+quarkus.helm.values.host.value=dev-host
+quarkus.helm.values.host.profile=dev
+```
