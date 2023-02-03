@@ -11,6 +11,10 @@ metadata:
   name: demo-argocd
   namespace: argocd
 spec:
+  controller:
+    env:
+    - name: ARGOCD_APPLICATION_CONTROLLER_REPO_SERVER_TIMEOUT_SECONDS
+      value: '10'
   server:
     insecure: true
     route:

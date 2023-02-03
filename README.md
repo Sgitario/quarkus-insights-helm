@@ -11,10 +11,7 @@ Requirements:
 1.- Create Quarkus application
 
 ```
-mvn io.quarkus.platform:quarkus-maven-plugin:2.16.0.Final:create \
-    -DprojectGroupId=org.acme \
-    -DprojectArtifactId=demo
-    -Dextensions="resteasy-reactive-jackson"
+mvn io.quarkus.platform:quarkus-maven-plugin:2.16.1.Final:create -Dextensions=resteasy-reactive-jackson
 cd demo
 ```
 
@@ -81,7 +78,7 @@ quarkus.openshift.deployment-kind=Deployment
 Specify output directory
 
 ```
-quarkus.helm.output-directory=/home/jcarvaja/sources/personal/quarkus-insights-helm
+quarkus.helm.output-directory=../helm
 ```
 
 Commit and push!
@@ -94,19 +91,15 @@ git push origin demo
 ```
 
 6.- ArgoCD: create application from github repository, showcase
+url: https://demo-argocd-server-demo.snowdrop-eu-de-1-bx2-4x16-0c576f1a70d464f092d8591997631748-0000.eu-de.containers.appdomain.cloud/applications
+repo: https://github.com/Sgitario/quarkus-insights-helm
 
 ## Second Showcase: postgresql, helm, mapping user properties
 
 1.- Configure REST Data with Panache
 
 ```
-./mvnw quarkus:add-extension -Dextensions='quarkus-hibernate-orm-rest-data-panache'
-```
-
-add the driver
-
-```
-./mvnw quarkus:add-extension -Dextensions='jdbc-postgresql'
+./mvnw quarkus:add-extension -Dextensions='quarkus-hibernate-orm-rest-data-panache,jdbc-postgresql'
 ```
 
 add entity
@@ -163,14 +156,16 @@ quarkus.openshift.env.vars.POSTGRESQL_USERNAME=user
 quarkus.openshift.env.vars.POSTGRESQL_PASSWORD=pass
 ```
 
+Explain that this will be mapped in values.yml file!!!
+
 5.- Configure Helm
 
 add postgresql:
 
 ```
-quarkus.helm.dependencies.postgresql.alias=db
-quarkus.helm.dependencies.postgresql.version=11.9.1
 quarkus.helm.dependencies.postgresql.repository=https://charts.bitnami.com/bitnami
+quarkus.helm.dependencies.postgresql.version=11.9.1
+quarkus.helm.dependencies.postgresql.alias=db
 ```
 
 configure postgresql:
@@ -231,6 +226,19 @@ db:
 
 7.- ArgoCD: update application from github repository, showcase
 
+8.- Delete application in ArgoCD
+
+9.- Configure helm repository
+
+```
+quarkus.helm.repository.type=CHARTMUSEUM
+quarkus.helm.repository.url=http://chartmuseum-helm-repository.snowdrop-eu-de-1-bx2-4x16-0c576f1a70d464f092d8591997631748-0000.eu-de.containers.appdomain.cloud/api/charts
+quarkus.helm.repository.push=true
+quarkus.helm.repository.deployment-target=openshift
+```
+
+10.- ArgoCD: create the application again from the Helm repository
+
 ## Third Showcase: mapping more properties, helm profiles
 
 1.- Map ImagePullPolicy
@@ -238,7 +246,7 @@ db:
 Explain about YAMLPath: https://github.com/yaml-path/YamlPath
 
 ```
-quarkus.helm.values.imagePullPolicy.paths=(kind == Deployment).spec.template.spec.containers.(name == demo).imagePullPolicy
+quarkus.helm.values.imagePullPolicy.paths=(kind == Deployment).spec.template.spec.containers.(name == NAME).imagePullPolicy
 ```
 
 Using wildcards:
