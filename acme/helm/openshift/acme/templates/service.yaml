@@ -4,8 +4,8 @@ kind: Service
 metadata:
   annotations:
     app.openshift.io/vcs-url: <<unknown>>
-    app.quarkus.io/commit-id: c77a0d9be97b39bbb1a01f2dd7302cb99571808c
-    app.quarkus.io/build-timestamp: 2023-02-03 - 09:21:15 +0000
+    app.quarkus.io/commit-id: 1d129147551ad2b59b43c0fc7f03b0d52530f56c
+    app.quarkus.io/build-timestamp: 2023-02-03 - 09:36:50 +0000
   labels:
     app.kubernetes.io/name: acme
     app.kubernetes.io/version: 1.0.0-SNAPSHOT
