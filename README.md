@@ -11,8 +11,8 @@ Requirements:
 1.- Create Quarkus application
 
 ```
-mvn io.quarkus.platform:quarkus-maven-plugin:2.16.1.Final:create -Dextensions=resteasy-reactive-jackson
-cd demo
+quarkus create app --extension resteasy-reactive-jackson org:acme
+cd acme
 ```
 
 2.- Run in Dev mode
@@ -32,10 +32,6 @@ Then, configure it:
 ```
 quarkus.container-image.build=true
 quarkus.container-image.push=true
-
-quarkus.container-image.registry=quay.io
-quarkus.container-image.group=jcarvaja
-// or 
 quarkus.container-image.image=quay.io/jcarvaja/demo:0.0.1
 ```
 
@@ -244,10 +240,6 @@ quarkus.helm.repository.deployment-target=openshift
 1.- Map ImagePullPolicy
 
 Explain about YAMLPath: https://github.com/yaml-path/YamlPath
-
-```
-quarkus.helm.values.imagePullPolicy.paths=(kind == Deployment).spec.template.spec.containers.(name == NAME).imagePullPolicy
-```
 
 Using wildcards:
 
