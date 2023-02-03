@@ -1,0 +1,4 @@
+---
+app:
+  serviceType: ClusterIP
+  image: quay.io/jcarvaja/demo:1.0
