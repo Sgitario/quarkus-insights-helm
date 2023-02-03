@@ -24,7 +24,7 @@ mvn quarkus:dev
 3.- Configure container image docker
 
 ```
-./mvnw quarkus:add-extension -Dextensions='container-image-docker'
+quarkus extension add container-image-docker
 ```
 
 Then, configure it:
@@ -44,7 +44,7 @@ mvn clean install -DskipTests
 4.- Configure kubernetes resources
 
 ```
-./mvnw quarkus:add-extension -Dextensions='openshift'
+quarkus extension add openshift
 ```
 
 And select the container builder to docker
@@ -95,7 +95,8 @@ repo: https://github.com/Sgitario/quarkus-insights-helm
 1.- Configure REST Data with Panache
 
 ```
-./mvnw quarkus:add-extension -Dextensions='quarkus-hibernate-orm-rest-data-panache,jdbc-postgresql'
+quarkus extension add quarkus-hibernate-orm-rest-data-panache
+quarkus extension add jdbc-postgresql
 ```
 
 add entity
