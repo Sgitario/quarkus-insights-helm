@@ -1,4 +1,29 @@
 ---
 app:
+  envs:
+    POSTGRESQL_URL: jdbc:postgresql://demo-db:5432/my_database
+    POSTGRESQL_USERNAME: user
+    POSTGRESQL_PASSWORD: pass
   serviceType: ClusterIP
-  image: quay.io/jcarvaja/demo:1.0
+  image: quay.io/jcarvaja/demo:2.0
+db:
+  auth:
+    database: my_database
+    password: pass
+    username: user
+  securityContext:
+    enabled: false
+  volumePermissions:
+    securityContext:
+      runAsUser: auto
+    enabled: false
+  shmVolume:
+    chmod:
+      enabled: false
+  primary:
+    podSecurityContext:
+      fsGroup: auto
+      enabled: false
+    containerSecurityContext:
+      runAsUser: auto
+      enabled: false

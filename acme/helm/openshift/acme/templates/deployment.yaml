@@ -4,32 +4,39 @@ kind: Deployment
 metadata:
   annotations:
     app.openshift.io/vcs-url: <<unknown>>
-    app.quarkus.io/commit-id: 24b419fd0ed87ea4bff7e4adae3f4382244ad4df
-    app.quarkus.io/build-timestamp: 2023-02-06 - 14:21:52 +0000
+    app.quarkus.io/commit-id: 081c02dcce8e9fa208168df6542c52d3f9d63c2f
+    app.quarkus.io/build-timestamp: 2023-02-06 - 14:39:31 +0000
   labels:
     app.openshift.io/runtime: quarkus
-    app.kubernetes.io/version: 1.0.0-SNAPSHOT
     app.kubernetes.io/name: acme
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
   name: acme
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/version: 1.0.0-SNAPSHOT
       app.kubernetes.io/name: acme
+      app.kubernetes.io/version: 1.0.0-SNAPSHOT
   template:
     metadata:
       annotations:
         app.openshift.io/vcs-url: <<unknown>>
-        app.quarkus.io/commit-id: 24b419fd0ed87ea4bff7e4adae3f4382244ad4df
-        app.quarkus.io/build-timestamp: 2023-02-06 - 14:21:52 +0000
+        app.quarkus.io/commit-id: 081c02dcce8e9fa208168df6542c52d3f9d63c2f
+        app.quarkus.io/build-timestamp: 2023-02-06 - 14:39:31 +0000
       labels:
         app.openshift.io/runtime: quarkus
-        app.kubernetes.io/version: 1.0.0-SNAPSHOT
         app.kubernetes.io/name: acme
+        app.kubernetes.io/version: 1.0.0-SNAPSHOT
     spec:
       containers:
-        - image: {{ .Values.app.image }}
+        - env:
+            - name: POSTGRESQL_URL
+              value: {{ .Values.app.envs.POSTGRESQL_URL }}
+            - name: POSTGRESQL_PASSWORD
+              value: {{ .Values.app.envs.POSTGRESQL_PASSWORD }}
+            - name: POSTGRESQL_USERNAME
+              value: {{ .Values.app.envs.POSTGRESQL_USERNAME }}
+          image: {{ .Values.app.image }}
           imagePullPolicy: Always
           name: acme
           ports:
