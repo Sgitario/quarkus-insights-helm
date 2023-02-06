@@ -1,0 +1,21 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    app.quarkus.io/commit-id: 24b419fd0ed87ea4bff7e4adae3f4382244ad4df
+    app.quarkus.io/build-timestamp: 2023-02-06 - 14:21:52 +0000
+  labels:
+    app.kubernetes.io/name: acme
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+  name: acme
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app.kubernetes.io/name: acme
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+  type: {{ .Values.app.serviceType }}
