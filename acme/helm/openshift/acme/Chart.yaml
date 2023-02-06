@@ -1,9 +1,0 @@
----
-name: acme
-version: 1.0.0-SNAPSHOT
-apiVersion: v2
-dependencies:
-  - name: postgresql
-    version: 11.9.1
-    repository: https://charts.bitnami.com/bitnami
-    alias: db
