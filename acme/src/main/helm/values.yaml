@@ -1,11 +1,6 @@
----
 app:
   envs:
     POSTGRESQL_URL: jdbc:postgresql://demo-db:5432/my_database
-    POSTGRESQL_USERNAME: user
-    POSTGRESQL_PASSWORD: pass
-  serviceType: ClusterIP
-  image: quay.io/jcarvaja/demo:2.0
 db:
   auth:
     database: my_database
