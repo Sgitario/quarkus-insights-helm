@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    app.openshift.io/vcs-url: <<unknown>>
+    app.quarkus.io/commit-id: d6db5b0ce4401e9b0cca56ac6e113a993d488375
+    app.quarkus.io/build-timestamp: 2023-02-06 - 12:18:29 +0000
+  labels:
+    app.openshift.io/runtime: quarkus
+    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+    app.kubernetes.io/name: acme
+  name: acme
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/version: 1.0.0-SNAPSHOT
+      app.kubernetes.io/name: acme
+  template:
+    metadata:
+      annotations:
+        app.openshift.io/vcs-url: <<unknown>>
+        app.quarkus.io/commit-id: d6db5b0ce4401e9b0cca56ac6e113a993d488375
+        app.quarkus.io/build-timestamp: 2023-02-06 - 12:18:29 +0000
+      labels:
+        app.openshift.io/runtime: quarkus
+        app.kubernetes.io/version: 1.0.0-SNAPSHOT
+        app.kubernetes.io/name: acme
+    spec:
+      containers:
+        - image: {{ .Values.app.image }}
+          imagePullPolicy: Always
+          name: acme
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP

@@ -5,6 +5,7 @@ Requirements:
 - Logged in [quay.io](https://quay.io) using [docker](https://www.docker.com/)
 - ArgoCD up and running (see setup guide [here](./argocd-installation.md)): https://demo-argocd-server-demo.snowdrop-eu-de-1-bx2-4x16-0c576f1a70d464f092d8591997631748-0000.eu-de.containers.appdomain.cloud/
 - ChartMuseum up and running (see setup guide [here](./chartmuseum-installation.md)): http://chartmuseum-helm-repository.snowdrop-eu-de-1-bx2-4x16-0c576f1a70d464f092d8591997631748-0000.eu-de.containers.appdomain.cloud/api/charts
+- Repo link: https://github.com/Sgitario/quarkus-insights-helm
 
 ## First showcase: getting started, container registry, kubernetes, predefined properties
 
@@ -68,7 +69,7 @@ quarkus.openshift.deployment-kind=Deployment
 5.- Configure helm resources
 
 ```
-./mvnw quarkus:add-extension -Dextensions='helm'
+quarkus extension add helm
 ```
 
 Specify output directory
