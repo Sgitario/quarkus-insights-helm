@@ -3,25 +3,25 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    app.quarkus.io/commit-id: 081c02dcce8e9fa208168df6542c52d3f9d63c2f
-    app.quarkus.io/build-timestamp: 2023-02-06 - 14:39:31 +0000
+    app.quarkus.io/commit-id: 0c8e63b3566e5ac8515134906c3bfa2c245141b6
+    app.quarkus.io/build-timestamp: 2023-02-06 - 14:51:28 +0000
   labels:
-    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+    app.kubernetes.io/version: {{ .Values.app.labelVersion }}
     app.kubernetes.io/name: acme
   name: acme
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/version: 1.0.0-SNAPSHOT
+      app.kubernetes.io/version: {{ .Values.app.labelVersion }}
       app.kubernetes.io/name: acme
   template:
     metadata:
       annotations:
-        app.quarkus.io/commit-id: 081c02dcce8e9fa208168df6542c52d3f9d63c2f
-        app.quarkus.io/build-timestamp: 2023-02-06 - 14:39:31 +0000
+        app.quarkus.io/commit-id: 0c8e63b3566e5ac8515134906c3bfa2c245141b6
+        app.quarkus.io/build-timestamp: 2023-02-06 - 14:51:28 +0000
       labels:
-        app.kubernetes.io/version: 1.0.0-SNAPSHOT
+        app.kubernetes.io/version: {{ .Values.app.labelVersion }}
         app.kubernetes.io/name: acme
     spec:
       containers:
@@ -31,7 +31,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
           image: {{ .Values.app.image }}
-          imagePullPolicy: Always
+          imagePullPolicy: {{ .Values.app.imagePullPolicy }}
           name: acme
           ports:
             - containerPort: 8080

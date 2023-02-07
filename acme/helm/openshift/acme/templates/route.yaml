@@ -4,11 +4,11 @@ kind: Route
 metadata:
   annotations:
     app.openshift.io/vcs-url: <<unknown>>
-    app.quarkus.io/commit-id: 081c02dcce8e9fa208168df6542c52d3f9d63c2f
-    app.quarkus.io/build-timestamp: 2023-02-06 - 14:39:31 +0000
+    app.quarkus.io/commit-id: 0c8e63b3566e5ac8515134906c3bfa2c245141b6
+    app.quarkus.io/build-timestamp: 2023-02-06 - 14:51:28 +0000
   labels:
     app.kubernetes.io/name: acme
-    app.kubernetes.io/version: 1.0.0-SNAPSHOT
+    app.kubernetes.io/version: {{ .Values.app.labelVersion }}
     app.openshift.io/runtime: quarkus
   name: acme
 spec:

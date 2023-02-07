@@ -4,40 +4,40 @@ kind: Deployment
 metadata:
   annotations:
     app.openshift.io/vcs-url: <<unknown>>
-    app.quarkus.io/commit-id: 081c02dcce8e9fa208168df6542c52d3f9d63c2f
-    app.quarkus.io/build-timestamp: 2023-02-06 - 14:39:31 +0000
+    app.quarkus.io/commit-id: 0c8e63b3566e5ac8515134906c3bfa2c245141b6
+    app.quarkus.io/build-timestamp: 2023-02-06 - 14:51:28 +0000
   labels:
     app.openshift.io/runtime: quarkus
+    app.kubernetes.io/version: {{ .Values.app.labelVersion }}
     app.kubernetes.io/name: acme
-    app.kubernetes.io/version: 1.0.0-SNAPSHOT
   name: acme
 spec:
   replicas: 1
   selector:
     matchLabels:
+      app.kubernetes.io/version: {{ .Values.app.labelVersion }}
       app.kubernetes.io/name: acme
-      app.kubernetes.io/version: 1.0.0-SNAPSHOT
   template:
     metadata:
       annotations:
         app.openshift.io/vcs-url: <<unknown>>
-        app.quarkus.io/commit-id: 081c02dcce8e9fa208168df6542c52d3f9d63c2f
-        app.quarkus.io/build-timestamp: 2023-02-06 - 14:39:31 +0000
+        app.quarkus.io/commit-id: 0c8e63b3566e5ac8515134906c3bfa2c245141b6
+        app.quarkus.io/build-timestamp: 2023-02-06 - 14:51:28 +0000
       labels:
         app.openshift.io/runtime: quarkus
+        app.kubernetes.io/version: {{ .Values.app.labelVersion }}
         app.kubernetes.io/name: acme
-        app.kubernetes.io/version: 1.0.0-SNAPSHOT
     spec:
       containers:
         - env:
-            - name: POSTGRESQL_URL
-              value: {{ .Values.app.envs.POSTGRESQL_URL }}
-            - name: POSTGRESQL_PASSWORD
-              value: {{ .Values.app.envs.POSTGRESQL_PASSWORD }}
             - name: POSTGRESQL_USERNAME
               value: {{ .Values.app.envs.POSTGRESQL_USERNAME }}
+            - name: POSTGRESQL_PASSWORD
+              value: {{ .Values.app.envs.POSTGRESQL_PASSWORD }}
+            - name: POSTGRESQL_URL
+              value: {{ .Values.app.envs.POSTGRESQL_URL }}
           image: {{ .Values.app.image }}
-          imagePullPolicy: Always
+          imagePullPolicy: {{ .Values.app.imagePullPolicy }}
           name: acme
           ports:
             - containerPort: 8080

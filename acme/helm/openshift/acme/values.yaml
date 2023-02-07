@@ -5,7 +5,9 @@ app:
     POSTGRESQL_USERNAME: user
     POSTGRESQL_PASSWORD: pass
   serviceType: ClusterIP
+  imagePullPolicy: Another
   image: quay.io/jcarvaja/demo:2.0
+  labelVersion: 1.0.0-SNAPSHOT
 db:
   auth:
     database: my_database
